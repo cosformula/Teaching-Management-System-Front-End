@@ -52,11 +52,11 @@
       </template>
       <el-menu-item-group>
         <!-- <span slot="title">常用功能</span> -->
-        <el-menu-item index="/manage/teacher-manage">教师管理</el-menu-item>
-        <el-menu-item index="/manage/student-manage">学生管理</el-menu-item>
-        <el-menu-item index="/manage/course-manage">课程管理</el-menu-item>
-        <el-menu-item index="/manage/grage-manage">成绩管理</el-menu-item>
-        <el-menu-item index="/manage/grade-stat">成绩统计</el-menu-item>
+        <el-menu-item index="/manager/teacher-manage">教师管理</el-menu-item>
+        <el-menu-item index="/manager/student-manage">学生管理</el-menu-item>
+        <el-menu-item index="/manager/course-manage">课程管理</el-menu-item>
+        <el-menu-item index="/manager/grage-manage">成绩管理</el-menu-item>
+        <el-menu-item index="/manager/grade-stat">成绩统计</el-menu-item>
       </el-menu-item-group>
       <!-- <el-menu-item-group title="分组2">
 
