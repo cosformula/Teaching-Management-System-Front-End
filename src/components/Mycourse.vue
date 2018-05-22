@@ -1,30 +1,6 @@
 <template>
 <div  @keyup.enter="onsubmit" >
-    <el-form :inline="true" size="small" ref="form" :model="form" label-width="70px">
-    <el-form-item label="课程号">
-        <el-input v-model="form.courseno" ></el-input>
-    </el-form-item>
-    <el-form-item label="课程名">
-        <el-input v-model="form.coursename"></el-input>
-      </el-form-item>
-      <el-form-item label="教师名">
-        <el-input v-model="form.teachname"></el-input>
-      </el-form-item>
-      <el-form-item label="学分">
-        <el-input v-model="form.credit"></el-input>
-      </el-form-item>
-      <el-form-item label="上课时间">
-        <el-input placeholder="格式：一1-2" v-model="form.coursetime"></el-input>
-    </el-form-item>
-    <el-form-item label="校区">
-    <el-select v-model="form.campus" placeholder="请选择校区">
-      <el-option label="全部" value=""></el-option>
-      <el-option label="本部" value="本部"></el-option>
-      <el-option label="嘉定" value="嘉定"></el-option>
-      <el-option label="延长" value="延长"></el-option>
-    </el-select>
-    </el-form-item>
-    </el-form>
+   
     <el-table
     :data="tableData"
     highlight-current-row
@@ -33,9 +9,15 @@
         
     <el-table-column label="操作" width="150" >
       <template scope="scope">
-        <el-button
-          size="small"
-          @click="addWait(scope.$index, scope.row)">加入待选课程</el-button>
+        <el-popover
+    
+     trigger="click">
+  <el-table :data="gridData">
+    <el-table-column width="150" property="stuno" label="学号"></el-table-column>
+    <el-table-column width="100" property="name" label="姓名"></el-table-column>
+  </el-table>
+  <el-button slot="reference" size="small">查看选课学生</el-button>
+</el-popover>
       </template>
     </el-table-column>
     <el-table-column
@@ -101,6 +83,23 @@ export default {
   data() {
     return {
       tableData: [],
+			gridData: [{
+          stuno: '15121000',
+          name: '王小虎',
+ 
+        }, {
+          stuno: '15121000',
+          name: '王小虎',
+   
+        }, {
+          stuno: '15121000',
+          name: '王小虎',
+   
+        }, {
+          stuno: '15121000',
+          name: '王小虎',
+ 
+        }],
       form: {
         courseno: '',
         coursename: '',

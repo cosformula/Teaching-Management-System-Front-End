@@ -12,7 +12,8 @@
             <div class="grid-content">测试 </div>
           </el-col> -->
     <el-col :span="6" style="text-align:right;color:white;">
-      <div class="grid-content">登录</div>
+      <!--<div class="grid-content">登录</div>-->
+			<el-button  type="primary">登录</el-button>
     </el-col>
   </el-row>
 </template>

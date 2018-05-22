@@ -2,6 +2,13 @@ import Index from './pages/Index.vue'
 import StudentSelect from './pages/StudentSelect.vue'
 import StudentCourseQuery from './pages/StudentCourseQuery.vue'
 import StudentGradeQuery from './pages/StudentGradeQuery.vue'
+import TCourseQuery from './pages/TCourseQuery.vue'
+import ScoreRegistration from './pages/ScoreRegistration.vue'
+import GradeSummary from './pages/GradeSummary.vue'
+import GradeTrends from './pages/GradeTrends.vue'
+import Edit from './components/Edit.vue'
+import GradeStat from './pages/GradeStat.vue'
+
 const routes = [{
     path: '/',
     component: Index
@@ -20,11 +27,11 @@ const routes = [{
   {
     path: '/student/grade-summary',
 
-    component: StudentCourseQuery
+    component: GradeSummary
   },
   {
     path: '/student/grade-trends',
-    component: StudentCourseQuery
+    component: GradeTrends
   },
   {
     path: '/teacher/new-class',
@@ -36,11 +43,11 @@ const routes = [{
   },
   {
     path: '/teacher/grade-manage',
-    component: StudentCourseQuery
+    component: ScoreRegistration
   },
   {
-    path: '/teacher/grade-state',
-    component: StudentCourseQuery
+    path: '/teacher/grade-sta',
+    component: GradeStat
   },
   {
     path: '/manager/teacher-manage',
@@ -63,14 +70,14 @@ const routes = [{
     path: '/manager/grade-stat',
     component: StudentCourseQuery
   },
-
-
-
-
-
-
-
-
+  {
+    path: '/teacher/t-course-query',
+    component: TCourseQuery
+  },
+  {
+    path: '/edit/:course:stuno',
+    component: Edit
+  }
 ]
 
 export default routes

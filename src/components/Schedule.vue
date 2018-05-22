@@ -52,7 +52,7 @@
 
 .time-ground div span {
   position: relative;
-  left: -20px;
+  left: -15px;
   top: 10px;
 }
 .task-ground {

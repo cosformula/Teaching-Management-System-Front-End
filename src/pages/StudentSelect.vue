@@ -10,6 +10,7 @@
         </el-tab-pane>
       </el-tabs>
     </el-col>
+
     <el-col :xs="8" :md="8" style="min-height:700px;height:700px;max-height:1000px;">
       <schedule :task-detail="courseSelected" @showDetail="showDetail" />
     </el-col>

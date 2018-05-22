@@ -32,10 +32,9 @@
       </template>
       <el-menu-item-group>
         <!-- <span slot="title">常用功能</span> -->
-        <el-menu-item index="/teacher/new-class">新开课程</el-menu-item>
-        <el-menu-item index="/teacher/course-query">开课查询</el-menu-item>
+        <el-menu-item index="/teacher/t-course-query">我的开课</el-menu-item>
         <el-menu-item index="/teacher/grade-manage">成绩登记</el-menu-item>
-        <el-menu-item index="/teacher/grade-stat">成绩统计</el-menu-item>
+        <el-menu-item index="/teacher/grade-sta">成绩统计</el-menu-item>
       </el-menu-item-group>
       <!-- <el-menu-item-group title="分组2">
 

@@ -5,10 +5,10 @@ import App from './App.vue'
 import axios from 'axios'
 import VueRouter from 'vue-router'
 import routes from './routes'
+import echarts from 'echarts'
+Vue.prototype.$echarts = echarts
 Vue.use(VueRouter)
-// import VueResource from 'vue-resource'
 Vue.use(ElementUI)
-// Vue.use(VueResource)
 const instance = axios.create({
   baseURL: 'http://localhost:5000',
   timeout: 1000,
@@ -20,7 +20,7 @@ const router = new VueRouter({
   routes
 })
 
-Vue.prototype.$http = instance
+//Vue.prototype.$http = instance
 new Vue({
   el: '#app',
   router,
