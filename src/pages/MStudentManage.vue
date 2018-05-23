@@ -26,11 +26,11 @@
     <el-table :data="tableData" highlight-current-row border max-height="600">
       <el-table-column prop="id" label="学号">
       </el-table-column>
-       <el-table-column prop="name" label="姓名">
+      <el-table-column prop="name" label="姓名">
       </el-table-column>
-      <el-table-column prop="credit" label="用户名" width="80">
+      <el-table-column prop="username" label="用户名">
       </el-table-column>
-       <el-table-column label="查看">
+      <el-table-column label="查看">
         <template slot-scope="scope">
           <el-button size="mini" @click="handleEdit(scope.$index, scope.row)">成绩表</el-button>
           <!-- <el-button size="mini" type="danger" @click="handleDelete(scope.$index, scope.row)">删除</el-button> -->
@@ -143,7 +143,7 @@ export default {
         type: 'warning'
       })
         .then(() => {
-          this.$http.delete(`/api/courses/${row.id}`).then(resp => {
+          this.$http.delete(`/api/students/${row.id}`).then(resp => {
             console.log(resp)
             this.query()
             this.$message({ message: '删除成功' })
@@ -173,7 +173,7 @@ export default {
       this.$refs['queryForm'].resetFields()
     },
     onEditSubmit() {
-      this.$http.put(`/api/courses/${this.editForm.id}`, this.editForm).then(resp => {
+      this.$http.put(`/api/students/${this.editForm.id}`, this.editForm).then(resp => {
         this.editDialogVisible = false
         this.$message({ message: '修改成功' })
         this.query()
@@ -181,7 +181,7 @@ export default {
     },
     onSubmit() {
       this.$http
-        .post('/api/courses/', this.form)
+        .post('/api/students/', this.form)
         .then(resp => {
           console.log(this.$refs)
           this.$refs['queryForm'].resetFields()
@@ -196,16 +196,10 @@ export default {
         })
     },
     query() {
-      this.$http
-        .get(
-          `/api/courses/?credit=${this.search.credit}&id=${this.search.id}&name=${this.search.name}&dept=${this.search.dept}&page=${
-            this.page
-          }&perPage=10`
-        )
-        .then(response => {
-          this.tableData = response.data.courses
-          this.total = response.data.total
-        })
+      this.$http.get(`/api/students/?id=${this.search.id}&name=${this.search.name}&page=${this.page}&perPage=10`).then(response => {
+        this.tableData = response.data.students
+        this.total = response.data.total
+      })
     },
     handleCurrentChange(val) {
       this.currentRow = val
