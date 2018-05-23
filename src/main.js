@@ -10,12 +10,15 @@ Vue.prototype.$echarts = echarts
 Vue.use(VueRouter)
 Vue.use(ElementUI)
 const instance = axios.create({
-  baseURL: 'http://localhost:5000',
-  timeout: 1000,
+  // baseURL: 'http://localhost:5000',
+  // timeout: 1000,
   headers: {
     // 'X-Custom-Header': 'foobar'
   }
 });
+Vue.prototype.$http = instance
+
+
 const router = new VueRouter({
   routes
 })

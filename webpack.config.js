@@ -80,10 +80,10 @@ module.exports = (options = {}) => ({
         port: 8010,
         proxy: {
             '/api/': {
-                target: 'https://www.shuhelper.cn/',
+                target: 'http://localhost:5000/',
                 changeOrigin: true,
                 pathRewrite: {
-                    '^/api': '/api'
+                    '^/api': '/'
                 }
             }
         },

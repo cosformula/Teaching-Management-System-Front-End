@@ -8,7 +8,8 @@ import GradeSummary from './pages/GradeSummary.vue'
 import GradeTrends from './pages/GradeTrends.vue'
 import Edit from './components/Edit.vue'
 import GradeStat from './pages/GradeStat.vue'
-
+import MCourseManage from './pages/MCourseManage.vue'
+import MStudentManage from './pages/MStudentManage.vue'
 const routes = [{
     path: '/',
     component: Index
@@ -51,16 +52,17 @@ const routes = [{
   },
   {
     path: '/manager/teacher-manage',
-    component: StudentCourseQuery
+    component: MStudentManage
   },
   {
     path: '/manager/student-manage',
-    component: StudentCourseQuery
+    component: MStudentManage
+
   },
 
   {
     path: '/manager/course-manage',
-    component: StudentCourseQuery
+    component: MCourseManage
   },
   {
     path: '/manager/grade-manage',
