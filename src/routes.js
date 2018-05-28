@@ -10,6 +10,12 @@ import Edit from './components/Edit.vue'
 import GradeStat from './pages/GradeStat.vue'
 import MCourseManage from './pages/MCourseManage.vue'
 import MStudentManage from './pages/MStudentManage.vue'
+import MTeacherManage from './pages/MTeacherManage.vue'
+// import MSelectManage from './pages/MSelectManage.vue'
+import MGradeStat from './pages/MGradeStat.vue'
+import MClassManage from './pages/MClassManage.vue'
+
+
 const routes = [{
     path: '/',
     component: Index
@@ -52,25 +58,28 @@ const routes = [{
   },
   {
     path: '/manager/teacher-manage',
-    component: MStudentManage
+    component: MTeacherManage
   },
   {
     path: '/manager/student-manage',
     component: MStudentManage
-
   },
 
   {
     path: '/manager/course-manage',
     component: MCourseManage
   },
+  // {
+  //   path: '/manager/select-manage',
+  //   component: MSelectManage
+  // },
   {
-    path: '/manager/grade-manage',
-    component: StudentCourseQuery
+    path: '/manager/class-manage',
+    component: MClassManage
   },
   {
     path: '/manager/grade-stat',
-    component: StudentCourseQuery
+    component: MGradeStat
   },
   {
     path: '/teacher/t-course-query',

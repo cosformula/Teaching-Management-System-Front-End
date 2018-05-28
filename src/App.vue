@@ -19,7 +19,7 @@
         <el-button type="success">已选学分:{{ credit }}</el-button> -->
       </el-header>
       <el-container>
-        <el-aside width="200px">
+        <el-aside width="210px">
           <aside-nav/>
         </el-aside>
         <el-main>

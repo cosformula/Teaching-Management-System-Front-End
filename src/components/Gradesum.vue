@@ -1,177 +1,92 @@
 <template>
-  <div>
-    <div class="container">
-      <b-row class="row-split">
-        <b-col cols="8" class="title">
-          <el-breadcrumb separator-class="el-icon-arrow-right">
-            <el-breadcrumb-item>分组管理</el-breadcrumb-item>
-            <el-breadcrumb-item>问卷检索</el-breadcrumb-item>
-          </el-breadcrumb>
-        </b-col>
-      </b-row>
-      <el-row class="row-split">
-        <div class="search-title">
-          <h5>目标问卷</h5>
-          <el-select class="questions" v-model="param.template"
-                     placeholder="目标问卷" value-key="id" @change="forceUpdate">
-            <el-option
-              v-for="template in templates"
-              :key="template.id"
-              :label="template.name"
-              :value="template">
-            </el-option>
-          </el-select>
-          <el-button-group>
-            <el-button type="primary" v-on:click="startSearch">筛选条件</el-button>
-            <el-button type="primary"
-                       v-if="searchResult&&searchResult.queryId"
-                       v-on:click="selectAuthUser(searchResult)">结果导出
-            </el-button>
-            <el-button type="primary"
-                       v-on:click="showExportHistory(param.template)">导出历史</el-button>
+  <el-card class="box-card">
+    
+    <el-table :data="tableData6" border show-summary style="width: 100%">
+      <el-table-column prop="id" label="ID" width="180">
+      </el-table-column>
+      <el-table-column prop="name" label="课程号">
+      </el-table-column>
+      <el-table-column prop="amount1" sortable label="课程名">
+      </el-table-column>
+      <el-table-column prop="amount2" sortable label="成绩">
+      </el-table-column>
+      <el-table-column prop="amount3" sortable label="绩点">
+      </el-table-column>
+    </el-table>
+  </el-card>
 
-            <el-button type="primary"
-                       v-if="searchResult&&searchResult.queryId"
-                       v-on:click="showAnalysis(searchResult.queryId)"
-            >数据分析
-            </el-button>
-          </el-button-group>
-
-        </div>
-      </el-row>
-      <el-row class="row-split">
-        <table class="table" v-loading="processing">
-          <tr>
-            <th>
-              #
-            </th>
-            <th>
-              问卷编号
-            </th>
-            <th>
-              被调查人
-            </th>
-            <th>
-              问卷时间
-            </th>
-            <th>
-              填写时间
-            </th>
-            <th>
-              查看
-            </th>
-          </tr>
-          <tr v-for="(q,i) in searchResult.data" :key="i" >
-            <td>
-              {{1+i+searchResult.current*searchResult.limit-searchResult.limit}}
-            </td>
-            <td>
-              {{q.serialCode}}
-            </td>
-            <td>
-              {{q.owner.nickName}}
-            </td>
-            <td>
-              {{new Date(q.questionDate)|moment('YYYY-MM-DD HH:mm:ss')}}
-            </td>
-            <td>
-              {{new Date(q.createTime)|moment('YYYY-MM-DD HH:mm:ss')}}
-            </td>
-            <td>
-              <a :style="{'margin-left':'5px'}" v-b-tooltip.hover title="查看问卷"
-                 :href="'#/question/user/detail/view/'+q.id" target='_blank' class="btn btn-primary btn-sm">
-                <i class="fa fa-eye"></i>
-              </a>
-            </td>
-          </tr>
-        </table>
-        <el-pagination
-          @current-change="handleCurrentChange"
-          :current-page.sync="searchResult.current"
-          :page-size="searchResult.limit"
-          layout="total, prev, pager, next"
-          :total="searchResult.total">
-        </el-pagination>
-      </el-row>
-      <question-search-modal ref="searchModal" :on-result="updateSearchResult"
-                             :query-start="queryStart"></question-search-modal>
-
-    </div>
-
-    <choose-auth-user ref="chooseAuthUserModal"></choose-auth-user>
-    <export-history ref="exportHistoryModal"></export-history>
-
-  </div>
 </template>
 
-
 <script>
-
-
-  export default {
-    data() {
-      return {
-        templates: [],
-        param: {},
-        query: {user: [], answer: []},
-        searchResult: {},
-        processing: false
-      }
-    },
-
-    computed: {},
-
-    mounted() {
-      this.listAll();
-    },
-
-
-    methods: {
-      listAll() {
-        this.$http.get("spring/question/template/listAllEnabled")
-          .then(function (resp) {
-            var data = resp.data;
-            this.templates = data;
-            if (data.length == 0) {
-              return;
+export default {
+  data() {
+    return {
+      tableData6: [
+        {
+          id: '12987122',
+          name: '王小虎',
+          amount1: '234',
+          amount2: '3.2',
+          amount3: 10
+        },
+        {
+          id: '12987123',
+          name: '王小虎',
+          amount1: '165',
+          amount2: '4.43',
+          amount3: 12
+        },
+        {
+          id: '12987124',
+          name: '王小虎',
+          amount1: '324',
+          amount2: '1.9',
+          amount3: 9
+        },
+        {
+          id: '12987125',
+          name: '王小虎',
+          amount1: '621',
+          amount2: '2.2',
+          amount3: 17
+        },
+        {
+          id: '12987126',
+          name: '王小虎',
+          amount1: '539',
+          amount2: '4.1',
+          amount3: 15
+        }
+      ]
+    }
+  },
+  methods: {
+    getSummaries(param) {
+      const { columns, data } = param
+      const sums = []
+      columns.forEach((column, index) => {
+        if (index === 0) {
+          sums[index] = '总价'
+          return
+        }
+        const values = data.map(item => Number(item[column.property]))
+        if (!values.every(value => isNaN(value))) {
+          sums[index] = values.reduce((prev, curr) => {
+            const value = Number(curr)
+            if (!isNaN(value)) {
+              return prev + curr
+            } else {
+              return prev
             }
-            var t = data[0];
-            this.param.template = t;
-          });
+          }, 0)
+          sums[index] += ' 元'
+        } else {
+          sums[index] = 'N/A'
+        }
+      })
 
-      },
-      startSearch() {
-
-        this.$refs.searchModal.show(this.param.template.id);
-      },
-      queryStart() {
-        this.processing = true;
-      },
-      updateSearchResult(result) {
-        this.searchResult = result;
-        this.processing = false;
-      },
-      forceUpdate() {
-        console.log(this);
-        this.$forceUpdate();
-      },
-      handleCurrentChange(page) {
-        this.processing = true;
-        this.$refs.searchModal.queryPage(this.searchResult.queryId, page);
-      },
-      selectAuthUser(queryResult) {
-        this.$refs.chooseAuthUserModal.show(queryResult);
-      },
-      showExportHistory(template){
-        this.$refs.exportHistoryModal.show(template);
-      },
-      showAnalysis(queryId){
-        let routeData = this.$router.resolve({
-          name: 'QuestionAnalysis',
-          params: {queryId: queryId}
-        });
-        window.open(routeData.href, '_blank');
-      }
+      return sums
     }
   }
+}
 </script>

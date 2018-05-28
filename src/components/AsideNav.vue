@@ -44,7 +44,7 @@
           <el-menu-item index="1-4-1">选项1</el-menu-item>
         </el-submenu> -->
     </el-submenu>
-        <el-submenu index="3">
+    <el-submenu index="3">
       <template slot="title">
         <i class="el-icon-location"></i>
         <span slot="title">管理员</span>
@@ -54,7 +54,9 @@
         <el-menu-item index="/manager/teacher-manage">教师管理</el-menu-item>
         <el-menu-item index="/manager/student-manage">学生管理</el-menu-item>
         <el-menu-item index="/manager/course-manage">课程管理</el-menu-item>
-        <el-menu-item index="/manager/grage-manage">成绩管理</el-menu-item>
+        <el-menu-item index="/manager/class-manage">开课管理</el-menu-item>
+        <!-- <el-menu-item index="/manager/select-manage">选课管理</el-menu-item> -->
+        <!-- <el-menu-item index="/manager/grade-manage">成绩管理</el-menu-item> -->
         <el-menu-item index="/manager/grade-stat">成绩统计</el-menu-item>
       </el-menu-item-group>
       <!-- <el-menu-item-group title="分组2">

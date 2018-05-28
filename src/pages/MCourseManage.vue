@@ -10,6 +10,11 @@
       <el-form-item label="学分" prop="credit">
         <el-input v-model="search.credit"></el-input>
       </el-form-item>
+      <el-form-item label="学院" prop="dept">
+        <el-input v-model="search.dept"></el-input>
+      </el-form-item>
+    </el-form>
+    <el-form :inline="true" size="small" label-width="70px">
       <el-form-item>
         <el-button @click="resetFields">
           重置
@@ -29,13 +34,13 @@
     <el-table :data="tableData" highlight-current-row border max-height="600">
       <el-table-column prop="id" label="课程号">
       </el-table-column>
-       <el-table-column prop="name" label="课程名">
+      <el-table-column prop="name" label="课程名">
       </el-table-column>
       <el-table-column prop="credit" label="学分" width="80">
       </el-table-column>
-      <el-table-column prop="detail" label="详情">
-      </el-table-column>
-      <el-table-column prop="dept" label="学院" width="80">
+      <!-- <el-table-column prop="detail" label="详情">
+      </el-table-column> -->
+      <el-table-column prop="dept" label="学院">
       </el-table-column>
       <el-table-column label="操作">
         <template slot-scope="scope">
@@ -101,7 +106,8 @@ export default {
         id: '',
         name: '',
         dept: '',
-        credit: ''
+        credit: '',
+        dept: ''
       },
       form: {
         id: '',

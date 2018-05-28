@@ -1,7 +1,7 @@
 <template>
   <div @keyup.enter="onQueryClick">
     <el-form :inline="true" size="small" ref="queryForm" :model="search" label-width="70px">
-      <el-form-item label="学号" prop="id">
+      <el-form-item label="工号" prop="id">
         <el-input v-model="search.id"></el-input>
       </el-form-item>
       <el-form-item label="姓名" prop="name">
@@ -24,15 +24,15 @@
       </el-form-item>
     </el-form>
     <el-table :data="tableData" highlight-current-row border max-height="600">
-      <el-table-column prop="id" label="学号">
+      <el-table-column prop="id" label="工号">
       </el-table-column>
       <el-table-column prop="name" label="姓名">
       </el-table-column>
-      <el-table-column prop="username" label="用户名">
+      <el-table-column prop="dept" label="部门">
       </el-table-column>
       <el-table-column label="查看">
         <template slot-scope="scope">
-          <el-button size="mini" @click="handleEdit(scope.$index, scope.row)">成绩表</el-button>
+          <el-button size="mini" @click="handleEdit(scope.$index, scope.row)">开设课程</el-button>
           <!-- <el-button size="mini" type="danger" @click="handleDelete(scope.$index, scope.row)">删除</el-button> -->
         </template>
       </el-table-column>
@@ -47,14 +47,14 @@
     </el-pagination>
     <el-dialog title="新建" :visible.sync="addDialogVisible" width="30%">
       <el-form ref="addForm" :model="form" label-width="80px">
-        <el-form-item label="学号" prop="id">
+        <el-form-item label="教师号" prop="id">
           <el-input v-model="form.id"></el-input>
         </el-form-item>
-        <el-form-item label="姓名" prop="name">
+        <el-form-item label="教师名" prop="name">
           <el-input v-model="form.name"></el-input>
         </el-form-item>
-        <el-form-item label='用户名' prop="username">
-          <el-input v-model="form.username"></el-input>
+        <el-form-item label='学院' prop="dept">
+          <el-input v-model="form.dept"></el-input>
         </el-form-item>
         <el-form-item>
           <el-button type="primary" @click="onSubmit">立即创建</el-button>
@@ -62,16 +62,16 @@
         </el-form-item>
       </el-form>
     </el-dialog>
-    <el-dialog :title="`学号：${editForm.id}`" :visible.sync="editDialogVisible" width="30%">
-      <el-form ref="editForm" :model="editForm" label-width="80px">
-        <!-- <el-form-item label="学号" prop="id">
+    <el-dialog :title="`教师号：${editForm.id}`" :visible.sync="editDialogVisible" width="30%">
+      <el-form ref="addForm" :model="editForm" label-width="80px">
+        <el-form-item label="教师号" prop="id">
           <el-input v-model="editForm.id"></el-input>
-        </el-form-item> -->
-        <el-form-item label="姓名" prop="name">
+        </el-form-item>
+        <el-form-item label="教师名" prop="name">
           <el-input v-model="editForm.name"></el-input>
         </el-form-item>
-        <el-form-item label='用户名' prop="username">
-          <el-input v-model="editForm.username"></el-input>
+        <el-form-item label='学院' prop="dept">
+          <el-input v-model="editForm.dept"></el-input>
         </el-form-item>
         <el-form-item>
           <el-button type="primary" @click="onEditSubmit">修改</el-button>
@@ -94,15 +94,11 @@ export default {
       form: {
         id: '',
         name: '',
-        credit: '',
-        detail: '',
         dept: ''
       },
       editForm: {
         id: '',
         name: '',
-        credit: '',
-        detail: '',
         dept: ''
       },
       page: 1,
@@ -128,13 +124,13 @@ export default {
   methods: {
     handleDelete(index, row) {
       console.log(row)
-      this.$confirm('此操作将永久删除该学生, 是否继续?', '提示', {
+      this.$confirm('此操作将永久删除该教师, 是否继续?', '提示', {
         confirmButtonText: '确定',
         cancelButtonText: '取消',
         type: 'warning'
       })
         .then(() => {
-          this.$http.delete(`/api/students/${row.id}`).then(resp => {
+          this.$http.delete(`/api/teachers/${row.id}`).then(resp => {
             console.log(resp)
             this.query()
             this.$message({ message: '删除成功' })
@@ -164,7 +160,7 @@ export default {
       this.$refs['queryForm'].resetFields()
     },
     onEditSubmit() {
-      this.$http.put(`/api/students/${this.editForm.id}`, this.editForm).then(resp => {
+      this.$http.put(`/api/teachers/${this.editForm.id}`, this.editForm).then(resp => {
         this.editDialogVisible = false
         this.$message({ message: '修改成功' })
         this.query()
@@ -172,7 +168,7 @@ export default {
     },
     onSubmit() {
       this.$http
-        .post('/api/students/', this.form)
+        .post('/api/teachers/', this.form)
         .then(resp => {
           console.log(this.$refs)
           this.$refs['queryForm'].resetFields()
@@ -187,8 +183,8 @@ export default {
         })
     },
     query() {
-      this.$http.get(`/api/students/?id=${this.search.id}&name=${this.search.name}&page=${this.page}&perPage=10`).then(response => {
-        this.tableData = response.data.students
+      this.$http.get(`/api/teachers/?id=${this.search.id}&name=${this.search.name}&page=${this.page}&perPage=10`).then(response => {
+        this.tableData = response.data.teachers
         this.total = response.data.total
       })
     },

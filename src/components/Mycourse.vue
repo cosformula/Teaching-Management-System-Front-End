@@ -21,29 +21,16 @@
       </template>
     </el-table-column>
     <el-table-column
+		  prop="course_na"
       label="课程名"
       width="150">
-      <template scope="scope">
-        <el-popover trigger="hover" placement="right">
-        <p>课程名: {{ scope.row.course_name }}</p>
-        <p>课程号: {{ scope.row.course_no }}</p>
-        <p>教师名: {{ scope.row.teacher_name }}</p>
-        <p>教师号: {{ scope.row.teacher_no }}</p>
-        <p>选课人数: {{ scope.row.enroll }}/{{ scope.row.capacity }}</p>
-        <p>开课学院: {{ scope.row.school }}</p>
-        <p>标签: {{ scope.row.tag }}</p>
-          <div slot="reference" class="name-wrapper">
-            <el-tag>{{ scope.row.course_name }}</el-tag>
-          </div>
-        </el-popover>
-      </template>
+     
     </el-table-column>
     <el-table-column
+		  prop="teacher_na"
       label="教师"
       width="80">
-      <template slot-scope="scope">
-        <span style="white-space:nowrap;"> {{ scope.row.teacher_name }}</span>
-      </template>
+     
     </el-table-column>
     <el-table-column
       prop="course_no"
@@ -61,11 +48,10 @@
       width="150">
     </el-table-column>
     <el-table-column
+		  prop="nub"
       label="人数"
       width="100">
-       <template scope="scope">
-       {{ scope.row.enroll}}/{{ scope.row.capacity}}
-      </template>
+      
     </el-table-column>
     <el-table-column
       prop="campus"
@@ -82,7 +68,19 @@
 export default {
   data() {
     return {
-      tableData: [],
+      tableData: [{
+				  course_na:'数据库',
+					teacher_na:'宋波',
+					course_no:'1000',
+					credit:'3',
+					time:'星期五 3-4',
+					nub:'35',
+					campus:'宝山校区',
+				
+				
+				
+			}
+			],
 			gridData: [{
           stuno: '15121000',
           name: '王小虎',
@@ -128,48 +126,32 @@ export default {
     }
   },
   methods: {
-    onFormChange: _.debounce(function() {
-      this.onSubmit()
-      this.searchQueryIsDirty = false
-    }, 500),
-    onSubmit() {
-      this.page = 1
-      this.query()
-    },
-    handlePageCurrentChange(val) {
-      this.page = val
-      this.tableData = []
-      this.query()
-    },
-    query() {
-      this.$http
-        .get(
-          '/api/courses/?term=2017_3&type=advance&no=' +
-            this.form.courseno +
-            '&name=' +
-            this.form.coursename +
-            '&teacher=' +
-            this.form.teachname +
-            '&time=' +
-            this.form.coursetime +
-            '&credit=' +
-            this.form.credit +
-            '&campus=' +
-            this.form.campus +
-            '&page=' +
-            this.page
-        )
-        .then(response => {
-          this.tableData = response.data.courses
-          this.total = response.data.total
-        })
-    },
-    handleCurrentChange(val) {
-      this.currentRow = val
-    },
-    addWait(index, row) {
-      this.$emit('addCourse', row)
-    }
+    getSummaries(param) {
+          const { columns, data } = param
+          const sums = []
+          columns.forEach((column, index) => {
+            if (index === 0) {
+              sums[index] = '总价'
+              return
+            }
+            const values = data.map(item => Number(item[column.property]))
+            if (!values.every(value => isNaN(value))) {
+              sums[index] = values.reduce((prev, curr) => {
+                const value = Number(curr)
+                if (!isNaN(value)) {
+                  return prev + curr
+                } else {
+                  return prev
+                }
+              }, 0)
+              sums[index] += ' 元'
+            } else {
+              sums[index] = 'N/A'
+            }
+          })
+    
+          return sums
+        }
   }
 }
 </script>
