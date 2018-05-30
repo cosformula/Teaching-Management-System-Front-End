@@ -1,18 +1,19 @@
 <template>
-  <el-row style="padding:0;">
-    <el-col :xs="16" :md="16" style="min-height:700px;height:90vh;max-height:1000px;">
-      <el-tabs type="border-card" :tab-position="'top'" style="height:700px;">
+  <el-row style="padding:0 0 0px 0;height:calc(100vh - 90px);">
+    <el-col :xs="8" :md="8" style="height:100%;">
+      <schedule :task-detail="courseSelected" @showDetail="showDetail" />
+    </el-col>
+    <el-col :xs="16" :md="16">
+      <el-tabs type="border-card" :tab-position="'top'" style="height:calc(100vh - 90px);">
         <el-tab-pane label="待选课程">
           <waitcourse :courseWaited="courseWaited" @addSchedule="addSchedule" @delCourse="delCourse" />
+          <el-button style="margin-top:10px;" @click="submitCourses">提交课表</el-button>
+          <!-- <el-button style="margin-top:10px;">重置课表</el-button> -->
         </el-tab-pane>
         <el-tab-pane label="搜索课程">
           <searchcourse @addCourse="addCourse" />
         </el-tab-pane>
       </el-tabs>
-    </el-col>
-
-    <el-col :xs="8" :md="8" style="min-height:700px;height:700px;max-height:1000px;">
-      <schedule :task-detail="courseSelected" @showDetail="showDetail" />
     </el-col>
   </el-row>
 </template>
@@ -21,7 +22,13 @@
 import Schedule from '../components/Schedule.vue'
 import Waitcourse from '../components/Waitcourse.vue'
 import Searchcourse from '../components/Searchcourse.vue'
-
+var cnNum = {
+  一: 1,
+  二: 2,
+  三: 3,
+  四: 4,
+  五: 5
+}
 export default {
   components: {
     Schedule,
@@ -39,12 +46,8 @@ export default {
     }
   },
   created: function() {
-    var code = this.getCode()
-    if (code == null) {
-      this.readData()
-    } else {
-      this.pull(code)
-    }
+    // var code = this.getCode()
+    this.readData()
   },
   computed: {
     credit: function() {
@@ -55,6 +58,15 @@ export default {
         }
       }
       return credit
+    },
+    courseSubmit: function() {
+      let ids = []
+      for (var i = this.courseWaited.length - 1; i >= 0; i--) {
+        if (this.courseWaited[i].status == '已选入') {
+          ids.push(this.courseWaited[i].id)
+        }
+      }
+      return ids
     },
     timeTable: function() {
       var table = [
@@ -69,7 +81,7 @@ export default {
           var timelist = this.coursetimeToNum(this.courseWaited[i].time)
           for (var j = timelist.length - 1; j >= 0; j--) {
             var day = timelist[j].day
-            for (var x = timelist[j].Start; x <= timelist[j].End; x++) {
+            for (var x = timelist[j].start; x <= timelist[j].end; x++) {
               table[day][x] = 1
             }
           }
@@ -78,28 +90,28 @@ export default {
       return table
     },
     courseSelected: function() {
-      console.log('courseSelected')
       var selected = [[], [], [], [], []]
       for (var i = this.courseWaited.length - 1; i >= 0; i--) {
         if (this.courseWaited[i].status == '已选入') {
           var timelist = this.coursetimeToNum(this.courseWaited[i].time)
-          var color = ['#2B2E4A', '#521262', '#903749', '#53354A', '#40514E', '#537780']
+          var color = ['#2B2E4A', '#521262', '#903749', '#53354A', '#40514E', '#537780', '#3765a4', '#76a5a4', '#579870', '#e391b4', '#b8954e']
           var course = this.courseWaited[i]
-          var rancolor = color[~~(Math.random() * color.length)]
+          let colorIndex = Math.abs(this.hashCode(course.course.name) % color.length)
+          var rancolor = color[colorIndex]
           for (var j = timelist.length - 1; j >= 0; j--) {
             var time = timelist[j]
             var item = {
+              id: course.id,
               day: time.day,
-              Start: time.Start,
-              End: time.End,
-              coursename: course.course_name,
-              courseno: course.course_no,
-              teachname: course.teacher_name,
-              teachno: course.teacher_no,
+              start: time.start,
+              end: time.end,
+              course: course.course,
+              teacher: course.teacher,
               status: course.status,
+              classID: course.classID,
               styleObj: {
-                height: (time.End - time.Start + 1) * 7.7 + '%',
-                top: (time.Start - 1) * 7.69 + '%',
+                height: (time.end - time.start + 1) * 7.7 + '%',
+                top: (time.start - 1) * 7.69 + '%',
                 backgroundColor: rancolor
               }
             }
@@ -111,41 +123,15 @@ export default {
     }
   },
   methods: {
-    getCode: function() {
-      return decodeURIComponent((new RegExp('n/' + '([^&;]+?)(&|#|;|$)').exec(location.href) || [, ''])[1].replace(/\+/g, '%20')) || null
-    },
-    pull: function(code) {
-      this.$http
-        .get('/api/pull?code=' + code)
-        .then(response => {
-          this.courseWaited = response.data
-          this.$message({
-            message: '已成功拉取云端的数据',
-            type: 'success'
-          })
-        })
-        .catch(function(response) {
-          console.log(response)
-        })
-    },
-    push: function() {
-      this.dialogShareVisible = true
-      this.code = ''
-      this.$http
-        .post('/api/push', JSON.stringify(this.courseWaited))
-        .then(response => {
-          this.$message({
-            message: '已成功推送数据到云端',
-            type: 'success'
-          })
-          this.code = response.data
-        })
-        .catch(function(response) {
-          console.log(response)
-        })
+    hashCode: function(s) {
+      var h = 0,
+        l = s.length,
+        i = 0
+      if (l > 0) while (i < l) h = ((h << 5) - h + s.charCodeAt(i++)) | 0
+      return h
     },
     showDetail: function(course) {
-      this.$confirm('从课表中删除' + course.coursename + course.teachname + ', 是否继续?', '提示', {
+      this.$confirm('从课表中删除' + course.course.name + course.teacher.name + ', 是否继续?', '提示', {
         confirmButtonText: '确定',
         cancelButtonText: '取消',
         type: 'warning'
@@ -167,7 +153,7 @@ export default {
     addCourse: function(course) {
       var conflict = false
       for (var i = this.courseWaited.length - 1; i >= 0; i--) {
-        if (this.courseWaited[i].course_no == course.course_no && this.courseWaited[i].teacher_no == course.teacher_no) {
+        if (this.courseWaited[i].course.id == course.course.id && this.courseWaited[i].classID == course.classID) {
           conflict = true
           break
         }
@@ -194,9 +180,9 @@ export default {
         var coursetime = patt.exec(str)
         str = str.replace(patt, '')
         var item = {
-          day: parseInt(cn_num[coursetime[1]] - 1),
-          Start: parseInt(coursetime[2]),
-          End: parseInt(coursetime[3])
+          day: parseInt(cnNum[coursetime[1]] - 1),
+          start: parseInt(coursetime[2]),
+          end: parseInt(coursetime[3])
         }
         timelist.push(item)
       }
@@ -204,7 +190,7 @@ export default {
     },
     locateCourse(course) {
       for (var i = this.courseWaited.length - 1; i >= 0; i--) {
-        if (this.courseWaited[i].course_no == course.course_no && this.courseWaited[i].teacher_no == course.teacher_no) {
+        if (this.courseWaited[i].course.id == course.course.id && this.courseWaited[i].classID == course.classID) {
           return i
         }
       }
@@ -216,7 +202,7 @@ export default {
       var conflict = false
       var timelist = this.coursetimeToNum(this.courseWaited[index].time)
       for (var i = timelist.length - 1; i >= 0; i--) {
-        for (var j = timelist[i].Start; j <= timelist[i].End; j++) {
+        for (var j = timelist[i].start; j <= timelist[i].end; j++) {
           if (this.timeTable[timelist[i].day][j] != 0) {
             conflict = true
           }
@@ -256,7 +242,7 @@ export default {
         type: 'success'
       })
     },
-    readData() {
+    readLocal() {
       if (JSON.parse(localStorage.getItem('courseWaited'))) {
         this.courseWaited = JSON.parse(localStorage.getItem('courseWaited'))
         this.$message({
@@ -269,6 +255,28 @@ export default {
           type: 'warning'
         })
       }
+    },
+    readData() {
+      this.$http.get(`/api/students/${this.$user.id}/classes?term=2018_1`).then(resp => {
+        console.log(resp)
+        let classes = resp.data.classes
+        for (let item of classes) {
+          item.class.status = '已选入'
+          this.courseWaited.push(item.class)
+        }
+      })
+    },
+    submitCourses() {
+      this.$http
+        .post(`/api/students/${this.$user.id}/classes?term=2018_1`, {
+          courses: this.courseSubmit
+        })
+        .then(resp => {
+          this.$message({
+            type: 'success',
+            message: '提交选课成功!'
+          })
+        })
     },
     clearData() {
       this.$confirm('此操作将删除目前的选课结果且无法恢复, 是否继续?', '提示', {
@@ -290,9 +298,6 @@ export default {
             message: '已取消删除'
           })
         })
-    },
-    shuhelper() {
-      window.open('https://www.shuhelper.cn/')
     }
   }
 }

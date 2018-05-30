@@ -17,7 +17,11 @@ const instance = axios.create({
   }
 });
 Vue.prototype.$http = instance
-
+Vue.prototype.$user = {
+  // id: '10008080',
+  id: '15121604',
+  type: 'student'
+}
 
 const router = new VueRouter({
   routes

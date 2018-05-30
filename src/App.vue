@@ -2,55 +2,84 @@
   <div id="app">
     <el-container>
       <el-header style="background: #99a9bf;">
-        <top-nav></top-nav>
-        <!-- <el-button-group style="">
-          <el-button type="primary" @click="saveData">保存</el-button>
-          <el-button type="primary" @click="readData">读取</el-button>
-          <el-button type="primary" @click="dialogVisible = true">导出</el-button>
-          <el-button type="primary" @click="clearData">清空</el-button>
-        </el-button-group>
-        <el-button-group style="">
-          <el-tooltip effect="dark" content="在页面内打开选课系统" placement="bottom">
-            <el-button type="primary" @click="dialogXkVisible = true">快捷选课</el-button>
-          </el-tooltip>
-          <el-button type="primary" @click="dialogAboutVisible = true">关于</el-button>
-          <el-button type="primary" @click="shuhelper">返回SHUhelper</el-button>
-        </el-button-group>
-        <el-button type="success">已选学分:{{ credit }}</el-button> -->
+        <el-row style="height:100%;" justify="space-between" type="flex" align="middle">
+          <el-col :span="6">
+            <div class="grid-content" style="font-size:20px;color:white;">
+              上海大学教务系统
+              <!-- <div style="color:black;">上海大学排课助手
+                <span style="color:grey;font-size:0.8rem;"> 17-18年春</span>
+              </div> -->
+            </div>
+          </el-col>
+          <!-- <el-col :span="12">
+            <div class="grid-content">测试 </div>
+          </el-col> -->
+          <el-col :span="6" style="text-align:right;color:white;">
+            <!--<div class="grid-content">登录</div>-->
+            <el-button type="primary" @click="loginDialogVisible=true">{{$user.id}}</el-button>
+          </el-col>
+        </el-row>
       </el-header>
       <el-container>
         <el-aside width="210px">
-          <aside-nav/>
+          <el-menu :router="true" default-active="/student/select" class="el-menu-vertical-demo" @open="handleOpen" @close="handleClose" :collapse="isCollapse">
+            <el-submenu index="1" v-if="$user.type==='student'">
+              <template slot="title">
+                <span slot="title">学生</span>
+              </template>
+              <el-menu-item-group>
+                <el-menu-item index="/student/select">选课退课</el-menu-item>
+                <el-menu-item index="/student/course-query">课程查询</el-menu-item>
+                <el-menu-item index="/student/grade-query">成绩查询</el-menu-item>
+                <el-menu-item index="/student/grade-summary">成绩大表</el-menu-item>
+                <el-menu-item index="/student/grade-trends">绩点走势</el-menu-item>
+              </el-menu-item-group>
+            </el-submenu>
+            <el-submenu index="2" v-if="$user.type==='teacher'">
+              <template slot="title">
+                <span slot="title">教师</span>
+              </template>
+              <el-menu-item-group>
+                <el-menu-item index="/teacher/my-course">我的开课</el-menu-item>
+                <el-menu-item index="/teacher/grade-manage">成绩登记</el-menu-item>
+                <el-menu-item index="/teacher/grade-stat">成绩统计</el-menu-item>
+              </el-menu-item-group>
+
+            </el-submenu>
+            <el-submenu index="3" v-if="$user.type==='admin'">
+              <template slot="title">
+                <span slot="title">管理员</span>
+              </template>
+              <el-menu-item-group>
+                <el-menu-item index="/manager/teacher-manage">教师管理</el-menu-item>
+                <el-menu-item index="/manager/student-manage">学生管理</el-menu-item>
+                <el-menu-item index="/manager/course-manage">课程管理</el-menu-item>
+                <el-menu-item index="/manager/class-manage">开课管理</el-menu-item>
+                <!-- <el-menu-item index="/manager/select-manage">选课管理</el-menu-item> -->
+                <!-- <el-menu-item index="/manager/grade-manage">成绩管理</el-menu-item> -->
+                <el-menu-item index="/manager/grade-stat">成绩统计</el-menu-item>
+              </el-menu-item-group>
+            </el-submenu>
+          </el-menu>
+
         </el-aside>
         <el-main>
           <router-view></router-view>
         </el-main>
       </el-container>
-      <el-dialog title="关于我们" :visible.sync="dialogAboutVisible" size="small">
-        <p>排课助手(xk.shuhelper.cn)是SHUhelper的一部分，主要是为了解决排课过程中的困难而制作的小工具，主要实现了搜索课程并从心仪的课程中排列出一份完美的课表的功能。</p>
-        <p> 欢迎关注我们的微信公众号 搜索：
-          <span style="color:red;">shuhelper</span> 或扫描下方二维码</p>
-        <p align="center">
-          <img width="100" src="https://static.shuhelper.cn/mp.jpg">
-        </p>
-        <p align="center">
-          <a href="https://github.com/cosformula/CourseSchedulingHelper" target="_blank">开源代码</a>
-        </p>
-        <p align="center">
-          <img src="http://forthebadge.com/images/badges/built-with-love.svg" />
-          <img src="http://forthebadge.com/images/badges/uses-js.svg" />
-          <img src="http://forthebadge.com/images/badges/makes-people-smile.svg" />
-        </p>
-        <blockquote style="color:grey;">遇到问题请加qq群：
-          <span style="color:red;">368238744</span> 反馈</blockquote>
-        <blockquote style="color:grey;">Version 0.10.0 | admin@shuhelper.cn | SHUhelper 开发委员会</blockquote>
-        <blockquote>
-          <span style="color:red;">♥</span>
-          <span style="color:grey;">Do have faith in what you're doing.</span>
-        </blockquote>
-        <span slot="footer" class="dialog-footer">
-          <el-button type="primary" @click="dialogAboutVisible = false">确 定</el-button>
-        </span>
+      <el-dialog title="登陆" :visible.sync="loginDialogVisible">
+        <el-form :model="form">
+          <el-form-item label="账户名">
+            <el-input v-model="form.id" auto-complete="off"></el-input>
+          </el-form-item>
+          <el-form-item label="密码">
+            <el-input type="password" v-model="form.password" auto-complete="off"></el-input>
+          </el-form-item>
+        </el-form>
+        <div slot="footer" class="dialog-footer">
+          <el-button @click="loginDialogVisible = false">取 消</el-button>
+          <el-button type="primary" @click="onLogin">确 定</el-button>
+        </div>
       </el-dialog>
     </el-container>
   </div>
@@ -59,12 +88,11 @@
 <script>
 import Schedule from './components/Schedule.vue'
 import AsideNav from './components/AsideNav.vue'
-import TopNav from './components/TopNav.vue'
+// import TopNav from './components/TopNav.vue'
 export default {
   components: {
     Schedule,
-    AsideNav,
-    TopNav
+    AsideNav
   },
   data() {
     return {
@@ -72,11 +100,28 @@ export default {
       dialogAboutVisible: false,
       dialogVisible: false,
       dialogShareVisible: false,
-      code: ''
+      loginDialogVisible: false,
+      code: '',
+      form: {
+        id: '',
+        password: ''
+      }
     }
   },
   created: function() {},
-  methods: {}
+  methods: {
+    onLogin() {
+      this.$user.id = this.form.id
+      if (this.$user.id === '00000000') {
+        this.$user.type = 'admin'
+      } else if (parseInt(this.$user.id) <= 11000000) {
+        this.$user.type = 'teacher'
+      } else {
+        this.$user.type = 'student'
+      }
+      this.loginDialogVisible = false
+    }
+  }
 }
 </script>
 

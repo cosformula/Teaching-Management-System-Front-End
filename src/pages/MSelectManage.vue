@@ -7,7 +7,7 @@
       <el-form-item label="课程名" prop="name">
         <el-input v-model="search.name"></el-input>
       </el-form-item>
-  
+
       <el-form-item>
         <el-button @click="resetFields">
           重置
@@ -18,7 +18,7 @@
           查询
         </el-button>
       </el-form-item>
-     
+
     </el-form>
     <el-table :data="tableData" highlight-current-row border max-height="600">
       <el-table-column prop="id" label="课程号">
@@ -38,13 +38,13 @@
       <el-table-column label="操作">
         <template slot-scope="scope">
           <el-button size="mini" @click="handleEdit(scope.$index, scope.row)">编辑</el-button>
-         
+
         </template>
       </el-table-column>
     </el-table>
     <el-pagination layout="total, prev, pager, next, jumper" :page-size="10" :total="total" :current-page="page" @current-change="handlePageCurrentChange">
     </el-pagination>
-    
+
     <el-dialog :title="`课程号：${editForm.id}`" :visible.sync="editDialogVisible" width="30%">
       <el-form ref="addForm" :model="editForm" label-width="80px">
         <el-form-item label="课程名" prop="name">
@@ -79,7 +79,7 @@ export default {
     return {
       addDialogVisible: false,
       tableData: [ {
-			
+
 			  id: '1000',
         name: '数据库',
         stuid: '15121000',
@@ -87,8 +87,8 @@ export default {
 				pscj:'90',
 				qmcj:'90',
 				zp:'90',
-				
-				
+
+
 				}],
       search: {
         id: '',

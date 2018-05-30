@@ -2,18 +2,20 @@ import Index from './pages/Index.vue'
 import StudentSelect from './pages/StudentSelect.vue'
 import StudentCourseQuery from './pages/StudentCourseQuery.vue'
 import StudentGradeQuery from './pages/StudentGradeQuery.vue'
-import TCourseQuery from './pages/TCourseQuery.vue'
-import ScoreRegistration from './pages/ScoreRegistration.vue'
-import GradeSummary from './pages/GradeSummary.vue'
+import TMyCourse from './pages/TMyCourse.vue'
+import TGradeManage from './pages/TGradeManage.vue'
+import StudentGradeSummary from './pages/StudentGradeSummary.vue'
 import GradeTrends from './pages/GradeTrends.vue'
 import Edit from './components/Edit.vue'
 import GradeStat from './pages/GradeStat.vue'
 import MCourseManage from './pages/MCourseManage.vue'
 import MStudentManage from './pages/MStudentManage.vue'
 import MTeacherManage from './pages/MTeacherManage.vue'
-// import MSelectManage from './pages/MSelectManage.vue'
+import MSelectManage from './pages/MSelectManage.vue'
 import MGradeStat from './pages/MGradeStat.vue'
 import MClassManage from './pages/MClassManage.vue'
+import MGradeManage from './pages/MGradeManage.vue'
+
 
 
 const routes = [{
@@ -33,16 +35,11 @@ const routes = [{
   },
   {
     path: '/student/grade-summary',
-
-    component: GradeSummary
+    component: StudentGradeSummary
   },
   {
     path: '/student/grade-trends',
     component: GradeTrends
-  },
-  {
-    path: '/teacher/new-class',
-    component: StudentCourseQuery
   },
   {
     path: '/teacher/course-query',
@@ -50,10 +47,10 @@ const routes = [{
   },
   {
     path: '/teacher/grade-manage',
-    component: ScoreRegistration
+    component: TGradeManage
   },
   {
-    path: '/teacher/grade-sta',
+    path: '/teacher/grade-stat',
     component: GradeStat
   },
   {
@@ -69,21 +66,25 @@ const routes = [{
     path: '/manager/course-manage',
     component: MCourseManage
   },
-  // {
-  //   path: '/manager/select-manage',
-  //   component: MSelectManage
-  // },
+  {
+    path: '/manager/select-manage',
+    component: MSelectManage
+  },
   {
     path: '/manager/class-manage',
     component: MClassManage
+  },
+  {
+    path: '/manager/grade-manage',
+    component: MGradeManage
   },
   {
     path: '/manager/grade-stat',
     component: MGradeStat
   },
   {
-    path: '/teacher/t-course-query',
-    component: TCourseQuery
+    path: '/teacher/my-course',
+    component: TMyCourse
   },
   {
     path: '/edit/:course:stuno',

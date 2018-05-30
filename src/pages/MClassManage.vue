@@ -41,6 +41,8 @@
       </el-table-column>
       <el-table-column prop="teacher.name" label="教师" width="80">
       </el-table-column>
+      <el-table-column prop="teacher.id" label="教师号" width="80">
+      </el-table-column>
       <el-table-column prop="term" label="学期" width="80">
       </el-table-column>
       <el-table-column prop="enroll" label="人数" width="60">
@@ -55,12 +57,11 @@
       </el-table-column>
       <!-- <el-table-column prop="username" label="用户名">
       </el-table-column> -->
-      <el-table-column label="查看">
+      <!-- <el-table-column label="查看">
         <template slot-scope="scope">
           <el-button size="mini" @click="onStudentsOpen(scope.$index, scope.row)">选课学生</el-button>
-          <!-- <el-button size="mini" type="danger" @click="handleDelete(scope.$index, scope.row)">删除</el-button> -->
         </template>
-      </el-table-column>
+      </el-table-column> -->
       <el-table-column label="操作" width="200">
         <template slot-scope="scope">
           <el-button size="mini" @click="handleEdit(scope.$index, scope.row)">编辑</el-button>
@@ -70,6 +71,9 @@
     </el-table>
     <el-pagination layout="total, prev, pager, next, jumper" :page-size="10" :total="total" :current-page="page" @current-change="handlePageCurrentChange">
     </el-pagination>
+    <!-- <el-dialog title="新建" :visible.sync="studentsDialogVisible" width="100%">
+      <class-students :classID="classID"></class-students>
+    </el-dialog>     -->
     <el-dialog title="新建" :visible.sync="addDialogVisible" width="30%">
       <el-form ref="addForm" :model="form" label-width="80px">
         <el-form-item label="课程号" prop="courseID">

@@ -4,9 +4,9 @@
       <el-radio-button :label="true">收起</el-radio-button>
     </el-radio-group> -->
   <el-menu :router="true" default-active="/student/select" class="el-menu-vertical-demo" @open="handleOpen" @close="handleClose" :collapse="isCollapse">
-    <el-submenu index="1">
+    <el-submenu index="1" v-if="$user.type==='student'">
       <template slot="title">
-        <i class="el-icon-location"></i>
+        <!-- <i class="el-icon-location"></i> -->
         <span slot="title">学生</span>
       </template>
       <el-menu-item-group>
@@ -25,16 +25,16 @@
           <el-menu-item index="1-4-1">选项1</el-menu-item>
         </el-submenu> -->
     </el-submenu>
-    <el-submenu index="2">
+    <el-submenu index="2" v-if="$user.type==='teacher'">
       <template slot="title">
-        <i class="el-icon-location"></i>
+        <!-- <i class="el-icon-location"></i> -->
         <span slot="title">教师</span>
       </template>
       <el-menu-item-group>
         <!-- <span slot="title">常用功能</span> -->
-        <el-menu-item index="/teacher/t-course-query">我的开课</el-menu-item>
+        <el-menu-item index="/teacher/my-course">我的开课</el-menu-item>
         <el-menu-item index="/teacher/grade-manage">成绩登记</el-menu-item>
-        <el-menu-item index="/teacher/grade-sta">成绩统计</el-menu-item>
+        <el-menu-item index="/teacher/grade-stat">成绩统计</el-menu-item>
       </el-menu-item-group>
       <!-- <el-menu-item-group title="分组2">
 
@@ -44,9 +44,9 @@
           <el-menu-item index="1-4-1">选项1</el-menu-item>
         </el-submenu> -->
     </el-submenu>
-    <el-submenu index="3">
+    <el-submenu index="3"  v-if="$user.type==='admin'">
       <template slot="title">
-        <i class="el-icon-location"></i>
+        <!-- <i class="el-icon-location"></i> -->
         <span slot="title">管理员</span>
       </template>
       <el-menu-item-group>

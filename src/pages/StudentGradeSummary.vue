@@ -1,19 +1,5 @@
 <template>
   <el-card class="box-card">
-    <div slot="header" class="clearfix">
-      <!-- <span>卡片名称</span> -->
-      <el-form>
-        <el-form-item label="选择学期">
-          <el-select v-model="term" placeholder="选择学期">
-            <el-option label="17-18秋" value="2017_1"></el-option>
-            <el-option label="17-18冬" value="2017_2"></el-option>
-            <el-option label="17-18春" value="2017_3"></el-option>
-            <el-option label="17-18夏" value="2017_4"></el-option>
-            <el-option label="18-19秋" value="2018_1"></el-option>
-          </el-select>
-        </el-form-item>
-      </el-form>
-    </div>
     <el-table v-loading="loading" :data="grades" border style="width: 100%">
       <el-table-column prop="class.course.id" label="课程号">
       </el-table-column>
@@ -22,6 +8,10 @@
       <el-table-column prop="class.classID" label="班级号">
       </el-table-column>
       <el-table-column prop="class.teacher.name" label="教师名">
+      </el-table-column>
+      <el-table-column prop="class.teacher.id" label="教师号">
+      </el-table-column>
+      <el-table-column prop="class.term" label="学期">
       </el-table-column>
       <el-table-column prop="class.course.name" sortable label="课程名">
       </el-table-column>
@@ -32,6 +22,7 @@
     </el-table>
     <el-button style="float:right;margin:10px;">GPA: {{gpa}}</el-button>
   </el-card>
+
 </template>
 
 <script>
@@ -55,10 +46,10 @@ export default {
   methods: {
     readData() {
       this.loading = true
-      this.$http.get(`/api/students/${this.$user.id}/classes?term=${this.term}`).then(resp => {
+      this.$http.get(`/api/students/${this.$user.id}/classes`).then(resp => {
         // console.log(resp)
-        this.gpa = resp.data.gpa
         this.loading = false
+        this.gpa = resp.data.gpa
         this.grades = resp.data.classes
       })
     },
